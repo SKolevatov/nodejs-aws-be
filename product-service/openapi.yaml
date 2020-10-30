@@ -1,0 +1,96 @@
+openapi: 3.0.1
+info:
+  title: Product Service
+  description: product service for quantum processors shop
+  version: '0.1'
+servers:
+  - url: 'https://tu6q8crrpc.execute-api.eu-west-1.amazonaws.com'
+paths:
+  /dev/products/:
+    get:
+      description: Method to get all products
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+              examples:
+                '0':
+                  value: >-
+                    [{"id":"1","name":"Bristlecone","manufacture":"Google","qubits":72,"price":23000000},{"id":"2","name":"Sycamore","manufacture":"Google","qubits":54,"price":19000000}]
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+              examples:
+                '0':
+                  value: >-
+                    {"message":"Unexpected error"}
+      servers:
+        - url: 'https://tu6q8crrpc.execute-api.eu-west-1.amazonaws.com'
+    servers:
+      - url: 'https://tu6q8crrpc.execute-api.eu-west-1.amazonaws.com'
+  /dev/products/{id}:
+    get:
+      description: Method to get product by id
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: Numeric id of the product to get
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  manufacture:
+                    type: string
+                  price:
+                    type: integer
+                  name:
+                    type: string
+                  qubits:
+                    type: integer
+                  id:
+                    type: string
+              examples:
+                '0':
+                  value: >-
+                    {"id":"1","name":"Bristlecone","manufacture":"Google","qubits":72,"price":23000000}
+        '404':
+          description: No product with specified id
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+              examples:
+                '0':
+                  value: >-
+                    {"message":"Product not found"}
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+              examples:
+                '0':
+                  value: >-
+                    {"message":"Unexpected error"}
+      servers:
+        - url: 'https://tu6q8crrpc.execute-api.eu-west-1.amazonaws.com'
+    servers:
+      - url: 'https://tu6q8crrpc.execute-api.eu-west-1.amazonaws.com'

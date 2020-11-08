@@ -4,9 +4,11 @@
   "description": "Serverless webpack example using Typescript",
   "main": "handler.js",
   "scripts": {
+    "deploy": "sls deploy",
     "test": "jest"
   },
   "dependencies": {
+    "pg": "^8.4.2",
     "source-map-support": "^0.5.10"
   },
   "devDependencies": {

@@ -25,8 +25,13 @@ const serverlessConfiguration: Serverless = {
     },
     environment: {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
+      PG_HOST: 'task4-instance.c4bpr1tbr0zy.eu-west-1.rds.amazonaws.com',
+      PG_PORT: 5432,
+      PG_DATABASE: 'postgres',
+      PG_USERNAME: 'postgres',
     },
   },
+
   functions: {
     getProductsList: {
       handler: 'handler.getProductsList',
@@ -56,8 +61,19 @@ const serverlessConfiguration: Serverless = {
           }
         }
       ]
+    },
+    createProduct: {
+      handler: 'handler.createProduct',
+      events: [
+        {
+          http: {
+            method: 'post',
+            path: 'products',
+          }
+        }
+      ]
     }
   }
-}
+};
 
 module.exports = serverlessConfiguration;

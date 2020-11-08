@@ -1,88 +1,53 @@
-const products = [
-    {
-        "id": "1",
-        "name": "Bristlecone",
-        "manufacture": "Google",
-        "qubits": 72,
-        "price": 23000000
-    },
-    {
-        "id": "2",
-        "name": "Sycamore",
-        "manufacture": "Google",
-        "qubits": 54,
-        "price": 19000000
-    },
-    {
-        "id": "3",
-        "name": "Tenerife",
-        "manufacture": "IBM",
-        "qubits": 5,
-        "price": 1000000
-    },
-    {
-        "id": "4",
-        "name": "Yorktown",
-        "manufacture": "IBM",
-        "qubits": 5,
-        "price": 1000000
-    },
-    {
-        "id": "5",
-        "name": "Melbourne",
-        "manufacture": "IBM",
-        "qubits": 14,
-        "price": 3000000
-    },
-    {
-        "id": "6",
-        "name": "Rüschlikon",
-        "manufacture": "IBM",
-        "qubits": 16,
-        "price": 3200000
-    },
-    {
-        "id": "7",
-        "name": "Tokyo",
-        "manufacture": "IBM",
-        "qubits": 20,
-        "price": 4000000
-    },
-    {
-        "id": "8",
-        "name": "Austin",
-        "manufacture": "IBM",
-        "qubits": 20,
-        "price": 4000000
-    },
-    {
-        "id": "9",
-        "name": "Acorn",
-        "manufacture": "Rigetti",
-        "qubits": 19,
-        "price": 3800000
-    },
-    {
-        "id": "10",
-        "name": "Aspen-1",
-        "manufacture": "Rigetti",
-        "qubits": 16,
-        "price": 3100000
-    },
-    {
-        "id": "11",
-        "name": "Agave",
-        "manufacture": "Rigetti",
-        "qubits": 8,
-        "price": 2300000
-    },
-    {
-        "id": "12",
-        "name": "Tangle Lake",
-        "manufacture": "Intel",
-        "qubits": 49,
-        "price": 18000000
-    }
-];
+const { Client } = require('pg');
 
-export const fetchProducts = async () => Promise.resolve(products);
+const {PG_HOST, PG_PORT, PG_DATABASE, PG_USERNAME, PG_PASSWORD} = process.env;
+const dbOptions = {
+    host: PG_HOST,
+    port: PG_PORT,
+    database: PG_DATABASE,
+    user: PG_USERNAME,
+    password: PG_PASSWORD,
+    ssl: {
+        rejectUnauthorized: false
+    },
+    connectionTimeoutMillis: 5000
+};
+
+export const importProduct = async (productDetails) => {
+    return runQueryOnDD(`
+        begin;
+        insert into products (title, description, price) values
+        ('${productDetails.title}', '${productDetails.description}', ${productDetails.price});
+        insert into stocks (product_id, count) values
+        ((select id from products where title='${productDetails.title}'), ${productDetails.count});
+        commit;
+    `)
+};
+
+export const fetchProducts = async () => {
+    return runQueryOnDD(`
+        select id, title, description, price, count from products JOIN stocks s2 on products.id = s2.product_id;
+    `);
+};
+
+export const fetchProduct = async (id) => {
+    return runQueryOnDD(`
+        select id, title, description, price, count from products p JOIN stocks s on p.id = s.product_id
+        where p.id = '${id}';
+    `);
+};
+
+export const runQueryOnDD = async (query: string) => {
+    const client = new Client(dbOptions);
+    await client.connect();
+    console.log(query);
+    try {
+        const result = await client.query(query);
+        console.log(result);
+        return result.rows;
+    } catch(err) {
+        console.error('Error during database request executing:', err);
+    } finally {
+        client.end();
+    }
+};

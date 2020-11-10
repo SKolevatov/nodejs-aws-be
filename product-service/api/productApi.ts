@@ -16,10 +16,11 @@ const dbOptions = {
 export const importProduct = async (productDetails) => {
     return runQueryOnDD(`
         begin;
+        with product as (
         insert into products (title, description, price) values
-        ('${productDetails.title}', '${productDetails.description}', ${productDetails.price});
+        ('${productDetails.title}', '${productDetails.description}', ${productDetails.price})
         insert into stocks (product_id, count) values
-        ((select id from products where title='${productDetails.title}'), ${productDetails.count});
+        ((select id from product) , ${productDetails.count});
         commit;
     `)
 };

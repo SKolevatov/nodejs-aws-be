@@ -29,6 +29,7 @@ const serverlessConfiguration: Serverless = {
       PG_PORT: 5432,
       PG_DATABASE: 'postgres',
       PG_USERNAME: 'postgres',
+      PG_PASSWORD: 'GmXTsYxuhykU5Somi9Dn'
     },
   },
 

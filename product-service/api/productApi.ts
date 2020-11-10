@@ -18,7 +18,7 @@ export const importProduct = async (productDetails) => {
         begin;
         with product as (
         insert into products (title, description, price) values
-        ('${productDetails.title}', '${productDetails.description}', ${productDetails.price})
+        ('${productDetails.title}', '${productDetails.description}', ${productDetails.price}) returning id)
         insert into stocks (product_id, count) values
         ((select id from product) , ${productDetails.count});
         commit;

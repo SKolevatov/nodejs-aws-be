@@ -1,9 +1,10 @@
 import {APIGatewayProxyHandler} from 'aws-lambda';
 import 'source-map-support/register';
 import {fetchProducts} from '../api/productApi';
-import {getCorsHeaders} from "./common";
+import {getCorsHeaders} from './common';
 
-export const getProductsList: APIGatewayProxyHandler = async () => {
+export const getProductsList: APIGatewayProxyHandler = async (event) => {
+    console.log('[get-prod-event-details]: ', JSON.stringify(event));
     try {
         const productList = await fetchProducts();
         return {

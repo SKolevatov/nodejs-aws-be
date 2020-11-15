@@ -1,12 +1,12 @@
 import { APIGatewayProxyHandler } from 'aws-lambda';
 import 'source-map-support/register';
-import { fetchProducts } from '../api/productApi';
-import {getCorsHeaders} from "./common";
+import { fetchProduct } from '../api/productApi';
+import {getCorsHeaders} from './common';
 
 export const getProductById: APIGatewayProxyHandler = async (event) => {
+    console.log('[create-prod-by-id-event-details]: ', JSON.stringify(event));
     try {
-        const productList = await fetchProducts();
-        const requestedProduct = productList.find(product => product.id === event.pathParameters.id);
+        const requestedProduct = await fetchProduct(event.pathParameters.id);
         if (requestedProduct) {
             return {
                 statusCode: 200,

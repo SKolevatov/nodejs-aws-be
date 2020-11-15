@@ -27,6 +27,7 @@ const serverlessConfiguration: Serverless = {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
     },
   },
+
   functions: {
     getProductsList: {
       handler: 'handler.getProductsList',
@@ -56,8 +57,30 @@ const serverlessConfiguration: Serverless = {
           }
         }
       ]
+    },
+    createProduct: {
+      handler: 'handler.createProduct',
+      events: [
+        {
+          http: {
+            method: 'post',
+            path: 'products',
+          }
+        }
+      ]
+    },
+    preflight: {
+      handler: 'handler.preflight',
+      events: [
+        {
+          http: {
+            method: 'options',
+            path: 'products',
+          }
+        }
+      ]
     }
   }
-}
+};
 
 module.exports = serverlessConfiguration;

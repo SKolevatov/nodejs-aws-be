@@ -4,17 +4,6 @@ import 'source-map-support/register';
 
 const BUCKET = 'rss-task5';
 
-async function getSignedUrl(s3, params){
-    return new Promise((resolve,reject) => {
-        s3.getSignedUrl('putObject', params, (err, url) => {
-            if (err) {
-                reject(err);
-            }
-            resolve(url);
-        })
-    });
-}
-
 export const importProductsFile: APIGatewayProxyHandler = async (event) => {
     const s3 = new S3({region: 'eu-west-1'});
     console.log('event:', event);
@@ -28,7 +17,7 @@ export const importProductsFile: APIGatewayProxyHandler = async (event) => {
     };
 
     try {
-        const signedUrl = await getSignedUrl(s3, params);
+        const signedUrl = await s3.getSignedUrlPromise('putObject', params);
         const response = {
             statusCode: 200,
             headers: {'Access-Control-Allow-Origin': '*'},

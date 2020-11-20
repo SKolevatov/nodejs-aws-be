@@ -25,6 +25,12 @@ const serverlessConfiguration: Serverless = {
     },
     environment: {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
+      SQS_URL: {
+        "Fn::ImportValue": "CatalogItemsQueueUrl",
+      },
+      SNS_ARN: {
+        Ref: "SNSTopic",
+      }
     },
     iamRoleStatements: [
       {
@@ -36,6 +42,13 @@ const serverlessConfiguration: Serverless = {
         Effect: 'Allow',
         Action: 's3:*',
         Resource: 'arn:aws:s3:::rss-task5/*',
+      },
+      {
+        Effect: 'Allow',
+        Action: 'sqs:*',
+        Resource: {
+          "Fn::ImportValue": "CatalogItemsQueueArn"
+        }
       }
     ]
   },

@@ -1,6 +1,6 @@
 const { getProductById } = require('../handlers/getProductById');
 
-describe('getProductList', () => {
+xdescribe('getProductList', () => {
     it('Happy path', async () => {
         const result = await getProductById({pathParameters: {id: '1'}}, null, () => null);
         expect(result.statusCode).toEqual(200);

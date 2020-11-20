@@ -1,6 +1,6 @@
 const { getProductsList } = require('../handlers/getProductsList');
 
-describe('getProductList', () => {
+xdescribe('getProductList', () => {
     it('happy path', async () => {
         const result = await getProductsList(null, null, () => null);
         expect(result.statusCode).toEqual(200);

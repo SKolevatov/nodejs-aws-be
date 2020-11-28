@@ -28,9 +28,6 @@ const serverlessConfiguration: Serverless = {
       SQS_URL: {
         "Fn::ImportValue": "CatalogItemsQueueUrl",
       },
-      SNS_ARN: {
-        Ref: "SNSTopic",
-      }
     },
     iamRoleStatements: [
       {

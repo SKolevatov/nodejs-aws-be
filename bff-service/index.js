@@ -26,7 +26,7 @@ app.all('/*', (req, res) => {
         if (method === 'GET') {
             if (cacheObj[requestUrl] && cacheObj[requestUrl].expires > Date.now()) {
                 console.log(`cache hit: ${requestUrl}`);
-                res.json(cacheObj[requestUrl]);
+                res.json(cacheObj[requestUrl].value);
                 return;
             }
             console.log(`cache miss: ${requestUrl}`);

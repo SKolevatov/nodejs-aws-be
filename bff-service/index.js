@@ -43,7 +43,7 @@ app.all('/*', (req, res) => {
             }
             res.json(resp.data)
         }).catch(err => {
-            // console.error(err);
+            console.error('Error', err);
 
             if (err.response) {
                 const {status, data} = err.response;
